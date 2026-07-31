@@ -190,25 +190,16 @@ onMounted(() => {
 
   const observerOptions = { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
 
-  // If the section is already (partially) visible on mount, show it immediately
-  if (sectionRef.value) {
-    const rect = sectionRef.value.getBoundingClientRect()
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      sectionVisible.value = true
-      return
-    }
-  }
-
   sectionObserver = new IntersectionObserver(handleIntersect, observerOptions)
   if (sectionRef.value) sectionObserver.observe(sectionRef.value)
 
-  // Safety fallback: if observer didn't fire, force visible after 1500ms
+  // Sécurité : si l'observer ne se déclenche jamais (edge case rare),
+  // force l'affichage après 1500ms
   fallbackTimeoutId = setTimeout(() => {
     if (!sectionVisible.value) {
       sectionVisible.value = true
       if (sectionObserver) sectionObserver.disconnect()
     }
-    if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId)
   }, 1500)
 })
 </script>
@@ -296,8 +287,9 @@ onMounted(() => {
   margin: 0 auto;
   min-height: auto;
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateY(30px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3,1), transform 1.2s cubic-bezier(0.16, 1, 0.3,1);
+  will-change: opacity, transform;
   scroll-margin-top: calc(var(--nav-height) + 20px);
 }
 .section--visible {
