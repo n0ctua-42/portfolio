@@ -177,17 +177,39 @@ const sectionRef = ref(null)
 const sectionVisible = ref(false)
 
 onMounted(() => {
-  const sectionObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        sectionVisible.value = true
-        sectionObserver.disconnect()
-      }
-    },
-    { threshold: 0.2 }
-  )
+  let sectionObserver = null
+  let fallbackTimeoutId = null
 
+  const handleIntersect = ([entry]) => {
+    if (entry.isIntersecting) {
+      sectionVisible.value = true
+      if (sectionObserver) sectionObserver.disconnect()
+      if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId)
+    }
+  }
+
+  const observerOptions = { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
+
+  // If the section is already (partially) visible on mount, show it immediately
+  if (sectionRef.value) {
+    const rect = sectionRef.value.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      sectionVisible.value = true
+      return
+    }
+  }
+
+  sectionObserver = new IntersectionObserver(handleIntersect, observerOptions)
   if (sectionRef.value) sectionObserver.observe(sectionRef.value)
+
+  // Safety fallback: if observer didn't fire, force visible after 1500ms
+  fallbackTimeoutId = setTimeout(() => {
+    if (!sectionVisible.value) {
+      sectionVisible.value = true
+      if (sectionObserver) sectionObserver.disconnect()
+    }
+    if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId)
+  }, 1500)
 })
 </script>
 
@@ -285,7 +307,7 @@ onMounted(() => {
 .section-eyebrow {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: #000;
+  color: var(--copper);
   margin-bottom: 12px;
 }
 .section-title {
