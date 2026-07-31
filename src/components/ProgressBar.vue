@@ -38,6 +38,7 @@ onUnmounted(() => {
 }
 
 .progress-bar {
+  position:relative;
   height: 100%;
   background: var(--ink);
   box-shadow: 0 0 6px rgba(16, 36, 47, 0.3);
@@ -50,9 +51,10 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   right: 0;
-  top: -5px;
-  width: 10px;
-  height: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 8px;
   background: var(--ink);
   border-radius: 1px;
   box-shadow: 0 0 4px rgba(16, 36, 47, 0.4);
