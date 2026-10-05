@@ -25,7 +25,8 @@ const devSkills = [
       { name: 'TypeScript', level: 66 },
       { name: 'JWT', level: 62 },
       { name: 'bcrypt', level: 60 },
-      { name: 'Swagger', level: 58 }
+      { name: 'Swagger', level: 58 },
+      { name: 'WebSocket', level: 40 }
     ]
   },
   {
@@ -101,7 +102,7 @@ const netSkills = [
   {
     title: 'Outils',
     tags: [
-      { name: 'GLPI', description: 'Notions de gestion de parc et tickets', level: 64 },
+      { name: 'GLPI', description: 'Gestion de parc et tickets', level: 64 },
       { name: 'Git/GitHub', description: 'Gestion de versions et collaboration technique', level: 72 }
     ]
   },
@@ -141,6 +142,7 @@ const techIcons = {
   'JWT': 'mdi:key-chain',
   'bcrypt': 'mdi:shield-lock',
   'Swagger': 'simple-icons:swagger',
+  'WebSocket': 'logos:websocket',
 
   'PostgreSQL': 'simple-icons:postgresql',
   'MySQL': 'simple-icons:mysql',
@@ -174,47 +176,29 @@ const techIcons = {
 }
 
 const sectionRef = ref(null)
-const sectionVisible = ref(false)
+const visibleGroups = ref([])
 
 onMounted(() => {
-  let sectionObserver = null
-  let fallbackTimeoutId = null
+  const groupObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const index = Number(entry.target.dataset.index)
+        if (!visibleGroups.value.includes(index)) {
+          visibleGroups.value.push(index)
+        }
+        groupObserver.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.2 })
 
-  const handleIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      sectionVisible.value = true
-      if (sectionObserver) sectionObserver.disconnect()
-      if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId)
-    }
-  }
-
-  const observerOptions = { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
-
-  // If the section is already (partially) visible on mount, show it immediately
-  if (sectionRef.value) {
-    const rect = sectionRef.value.getBoundingClientRect()
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      sectionVisible.value = true
-      return
-    }
-  }
-
-  sectionObserver = new IntersectionObserver(handleIntersect, observerOptions)
-  if (sectionRef.value) sectionObserver.observe(sectionRef.value)
-
-  // Safety fallback: if observer didn't fire, force visible after 1500ms
-  fallbackTimeoutId = setTimeout(() => {
-    if (!sectionVisible.value) {
-      sectionVisible.value = true
-      if (sectionObserver) sectionObserver.disconnect()
-    }
-    if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId)
-  }, 1500)
+  sectionRef.value?.querySelectorAll('.skill-group').forEach((group) => {
+    groupObserver.observe(group)
+  })
 })
 </script>
 
 <template>
-  <section ref="sectionRef" :class="['section', { 'section--visible': sectionVisible }]" id="skills">
+  <section ref="sectionRef" class="section" id="skills">
     <p class="section-eyebrow">compétences</p>
     <h2 class="section-title">Deux terrains, un seul niveau d'exigence</h2>
 
@@ -223,9 +207,10 @@ onMounted(() => {
         <h3>Développement</h3>
         <div
           class="skill-group glass-card"
-          v-for="group in devSkills"
+          v-for="(group, index) in devSkills"
           :key="group.title"
-          :class="{ 'is-visible': sectionVisible }"
+          :data-index="index"
+          :class="{ 'is-visible': visibleGroups.includes(index) }"
         >
           <div class="skill-group-header">
             <h4>{{ group.title }}</h4>
@@ -244,7 +229,7 @@ onMounted(() => {
               <div class="tag-content">
                 <strong>{{ tag.name }}</strong>
                 <div class="tag-progress" aria-hidden="true">
-                  <span class="tag-progress__fill" :style="{ width: sectionVisible ? tag.level + '%' : '0%' }"></span>
+                  <span class="tag-progress__fill" :style="{ width: visibleGroups.includes(index) ? tag.level + '%' : '0%' }"></span>
                 </div>
               </div>
             </div>
@@ -256,9 +241,10 @@ onMounted(() => {
         <h3>Réseaux &amp; support IT</h3>
         <div
           class="skill-group glass-card"
-          v-for="group in netSkills"
+          v-for="(group, index) in netSkills"
           :key="group.title"
-          :class="{ 'is-visible': sectionVisible, 'skill-group--compact': group.title === 'Cybersécurité' || group.title === 'Réseaux' }"
+          :data-index="devSkills.length + index"
+          :class="{ 'is-visible': visibleGroups.includes(devSkills.length + index), 'skill-group--compact': group.title === 'Cybersécurité' || group.title === 'Réseaux' }"
         >
           <div class="skill-group-header">
             <h4>{{ group.title }}</h4>
@@ -278,7 +264,7 @@ onMounted(() => {
                 <strong>{{ tag.name }}</strong>
                 <span v-if="tag.description" class="tag-description">{{ tag.description }}</span>
                 <div class="tag-progress" aria-hidden="true">
-                  <span class="tag-progress__fill" :style="{ width: sectionVisible ? tag.level + '%' : '0%' }"></span>
+                  <span class="tag-progress__fill" :style="{ width: visibleGroups.includes(devSkills.length + index) ? tag.level + '%' : '0%' }"></span>
                 </div>
               </div>
             </div>
@@ -295,14 +281,7 @@ onMounted(() => {
   max-width: min(1120px, 100%);
   margin: 0 auto;
   min-height: auto;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
   scroll-margin-top: calc(var(--nav-height) + 20px);
-}
-.section--visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 .section-eyebrow {
   font-family: var(--font-mono);

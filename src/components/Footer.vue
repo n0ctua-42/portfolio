@@ -18,13 +18,13 @@ function scrollToTop() {
           <Github :size="20" :stroke-width="2" aria-hidden="true" />
         </a>
 
-        <!-- Remplacez par votre URL LinkedIn personnelle -->
-        <a class="social-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <!-- Profil LinkedIn -->
+        <a class="social-link" href="https://www.linkedin.com/in/tojo-andriamandimbison-9879113b1/?isSelfProfile=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
           <Linkedin :size="20" :stroke-width="2" aria-hidden="true" />
         </a>
 
-        <!-- Remplacez par votre lien d'invitation Discord ou profil Discord -->
-        <a class="social-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+        <!--Profil Discord -->
+        <a class="social-link" href="https://discord.com/users/1292926460352397388" target="_blank" rel="noopener noreferrer" aria-label="Discord">
           <Icon icon="simple-icons:discord" width="20" aria-hidden="true" />
         </a>
       </nav>

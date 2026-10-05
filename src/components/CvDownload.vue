@@ -41,7 +41,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
 
-// PDF importés via Vite pour un bundling propre
+// PDF importés via Vite 
 const pdfDev = new URL('../assets/cv/cv-dev.pdf', import.meta.url).href
 const pdfReseau = new URL('../assets/cv/cv-reseau.pdf', import.meta.url).href
 
@@ -161,5 +161,13 @@ onUnmounted(() => {
 .dropdown-enter-active,
 .dropdown-leave-active {
   transition: opacity 200ms ease, transform 200ms ease;
+}
+
+@media (max-width: 640px) {
+  .dropdown-menu {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
 }
 </style>
