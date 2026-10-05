@@ -4,22 +4,54 @@ import { ref, onMounted } from 'vue'
 const projects = [
   {
     type: 'dev',
-    title: 'SmartTodo',
-    stack: 'NestJS · JWT · Sequelize · MySQL · Swagger',
+    title: 'Trello',
+    stack: 'NestJS · TypeScript · PostgreSQL · Sequelize · JWT · REST API',
     points: [
-      "API de gestion de tâches construite avec NestJS, architecture modulaire.",
-      "Authentification et sécurisation des routes avec JWT.",
-      "Persistance des données via Sequelize sur MySQL, avec relations et migrations.",
-      "Documentation interactive de l'API avec Swagger."
+      "API backend d'une application collaborative de gestion de projets inspirée de Trello.",
+      "Architecture modulaire avec gestion des utilisateurs, projets, tableaux, listes, tâches, labels, commentaires et checklists.",
+      "Authentification JWT et sécurisation des routes avec guards et contrôle des accès.",
+      "Persistance des données avec Sequelize et PostgreSQL, avec gestion de relations entre les différentes entités.",
+      "Validation des données avec DTO et class-validator, gestion centralisée des erreurs et structuration propre du backend.",
+      "Développement d'une API REST destinée à être consommée par un frontend Vue.js.",
     ]
   },
   {
     type: 'dev',
-    title: "Application d'authentification sécurisée",
-    stack: 'Node.js · Express · Prisma · PostgreSQL · JWT',
+    title: "WebSocket Real-Time",
+    stack: 'NestJS · TypeScript · WebSocket · REST API',
     points: [
-      "Développement d'une API REST sécurisée avec Prisma ORM et PostgreSQL.",
-      "Authentification basée sur JWT, chiffrement des mots de passe avec bcrypt."
+      "Application temps réel développée avec NestJS pour expérimenter la communication bidirectionnelle via WebSocket.",
+      "Mise en place d'un système de rooms permettant à plusieurs clients de rejoindre un même espace de communication.",
+      "Transmission et diffusion instantanée des messages entre les clients connectés.",
+      "Utilisation des WebSocket Gateway de NestJS pour gérer les connexions, événements et communications temps réel.",
+      "Projet réalisé pour approfondir l'intégration du temps réel dans une architecture backend NestJS.",
+    ]
+  },
+  {
+    type: 'dev',
+    title: "API Auth Prisma JWT",
+    stack: 'Node.js · TypeScript · Express · Prisma · PostgreSQL · JWT',
+    points: [
+      "API REST sécurisée développée avec Node.js et Express pour la gestion des utilisateurs.",
+      "Authentification basée sur JWT avec gestion des rôles admin et user.",
+      "Utilisation de Prisma ORM pour communiquer avec une base de données PostgreSQL.",
+      "Hachage sécurisé des mots de passe et protection des ressources nécessitant une authentification.",
+      "Mise en place d'un système de contrôle d'accès basé sur les rôles (RBAC).",
+      "Projet permettant d'expérimenter Prisma et PostgreSQL dans une architecture d'API REST.",
+    ]
+  },
+  {
+    type: 'dev',
+    title: "Todo App API",
+    stack: 'NestJS · TypeScript · Sequelize · MySQL · JWT · Swagger',
+    points: [
+      "API REST de gestion de tâches construite avec NestJS selon une architecture modulaire.",
+      "Authentification et sécurisation des routes avec JWT et Passport.",
+      "Gestion complète des utilisateurs et des tâches avec opérations CRUD.",
+      "Persistance des données avec Sequelize et MySQL, avec relations entre les entités.",
+      "Validation des requêtes avec class-validator et gestion centralisée des erreurs HTTP.",
+      "Documentation interactive de l'API avec Swagger.",
+      "Mise en place de guards et d'une architecture séparant controllers, services, modules et accès aux données.",
     ]
   },
   {
