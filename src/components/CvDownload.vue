@@ -17,7 +17,7 @@
         <a
           class="dropdown-item"
           :href="pdfDev"
-          download="cv-dev.pdf"
+          download=" CV_DEV_ANDRIMANDIMBISON_TOJO"
           role="menuitem"
           @click="closeMenu"
         >
@@ -26,7 +26,7 @@
         <a
           class="dropdown-item dropdown-item--separator"
           :href="pdfReseau"
-          download="cv-reseau.pdf"
+          download="CV_RÉSEAUX_ANDRIMANDIMBISON TOJO"
           role="menuitem"
           @click="closeMenu"
         >
