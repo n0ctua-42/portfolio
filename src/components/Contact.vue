@@ -17,12 +17,17 @@ function openGmail(event) {
   const subjectField = form.subject.value.trim()
   const message = form.message.value.trim()
 
-  const mailtoSubject = encodeURIComponent('Contact depuis mon portfolio')
-  const mailtoBody = encodeURIComponent(
-    `Bonjour,%0D%0A%0D%0ANom : ${fullname}%0D%0AEmail : ${email}%0D%0ASujet : ${subjectField || '—'}%0D%0A%0D%0AMessage : %0D%0A${message}%0D%0A%0D%0AMerci.`
+  const gmailUrl = new URL('https://mail.google.com/mail/')
+  gmailUrl.searchParams.set('view', 'cm')
+  gmailUrl.searchParams.set('fs', '1')
+  gmailUrl.searchParams.set('to', 'toumandimbison@gmail.com')
+  gmailUrl.searchParams.set('su', subjectField || 'Contact depuis mon portfolio')
+  gmailUrl.searchParams.set(
+    'body',
+    `Bonjour,\n\nNom : ${fullname}\nEmail : ${email}\nSujet : ${subjectField || 'Contact depuis mon portfolio'}\n\nMessage :\n${message}\n\nMerci.`
   )
 
-  window.location.href = `mailto:toumandimbison@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`
+  window.location.assign(gmailUrl.toString())
 }
 
 let observer
